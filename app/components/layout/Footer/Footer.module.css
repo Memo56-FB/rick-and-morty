@@ -1,0 +1,19 @@
+.footer {
+  position: relative;
+}
+
+.backgroundImage {
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  height: auto;
+  z-index: 0;
+}
+
+.gradientBar {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  height: 3.125rem;
+  background: linear-gradient(180deg, #9edf25 0%, #86c313 42%, #5d8705 71%, #1e2e00 100%);
+}
