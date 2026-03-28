@@ -1,3 +1,4 @@
+import type { ChangeEventHandler } from 'react'
 import { CharacterCard } from '@/app/components/cards/CharacterCard/CharacterCard'
 import { FavoritesPanel, type FavoriteCharacter } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
@@ -10,7 +11,9 @@ type DesktopCharacterSidebarProps = {
   currentCharacterId: number
   favorites: FavoriteCharacter[]
   isLoadingPage?: boolean
+  searchQuery: string
   showPager: boolean
+  onSearchChange: ChangeEventHandler<HTMLInputElement>
   onSelectCharacter: (characterId: number) => void
   onPreviousPage: () => void
   onNextPage: () => void
@@ -21,7 +24,9 @@ export const DesktopCharacterSidebar = ({
   currentCharacterId,
   favorites,
   isLoadingPage = false,
+  searchQuery,
   showPager,
+  onSearchChange,
   onSelectCharacter,
   onPreviousPage,
   onNextPage,
@@ -29,7 +34,10 @@ export const DesktopCharacterSidebar = ({
   return (
     <aside className={styles.sidebar}>
       <div className={styles.searchSlot}>
-        <CharacterSearch />
+        <CharacterSearch
+          value={searchQuery}
+          onChange={onSearchChange}
+        />
       </div>
 
       <div className={styles.cardArea}>

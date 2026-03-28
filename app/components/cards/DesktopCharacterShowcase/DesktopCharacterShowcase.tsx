@@ -1,5 +1,6 @@
 'use client'
 
+import type { ChangeEventHandler } from 'react'
 import type { FavoriteCharacter } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import type { RickAndMortyCharacter } from '@/types/rick-and-morty'
 import { DesktopCharacterFeature } from './DesktopCharacterFeature/DesktopCharacterFeature'
@@ -11,7 +12,9 @@ type DesktopCharacterShowcaseProps = {
   currentCharacter: RickAndMortyCharacter
   favorites: FavoriteCharacter[]
   isLoadingPage?: boolean
+  searchQuery: string
   showPager: boolean
+  onSearchChange: ChangeEventHandler<HTMLInputElement>
   onSelectCharacter: (characterId: number) => void
   onPreviousPage: () => void
   onNextPage: () => void
@@ -22,7 +25,9 @@ export const DesktopCharacterShowcase = ({
   currentCharacter,
   favorites,
   isLoadingPage = false,
+  searchQuery,
   showPager,
+  onSearchChange,
   onSelectCharacter,
   onPreviousPage,
   onNextPage,
@@ -36,7 +41,9 @@ export const DesktopCharacterShowcase = ({
           currentCharacterId={currentCharacter.id}
           favorites={favorites}
           isLoadingPage={isLoadingPage}
+          searchQuery={searchQuery}
           showPager={showPager}
+          onSearchChange={onSearchChange}
           onSelectCharacter={onSelectCharacter}
           onPreviousPage={onPreviousPage}
           onNextPage={onNextPage}

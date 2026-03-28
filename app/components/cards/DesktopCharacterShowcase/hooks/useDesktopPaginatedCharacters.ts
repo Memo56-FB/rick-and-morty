@@ -11,6 +11,10 @@ type PrefetchedNextPage = {
   page: CharactersPage
 }
 
+type UseDesktopPaginatedCharactersOptions = {
+  disabled?: boolean
+}
+
 const getLastGroupIndex = (resultsLength: number) => {
   if (resultsLength === 0) {
     return 0
@@ -20,7 +24,8 @@ const getLastGroupIndex = (resultsLength: number) => {
 }
 
 export const useDesktopPaginatedCharacters = (
-  initialCharactersPage: CharactersPage
+  initialCharactersPage: CharactersPage,
+  { disabled = false }: UseDesktopPaginatedCharactersOptions = {}
 ) => {
   const [charactersPage, setCharactersPage] = useState(initialCharactersPage)
   const [groupIndex, setGroupIndex] = useState(0)
@@ -41,7 +46,7 @@ export const useDesktopPaginatedCharacters = (
     || Boolean(charactersPage.info.next || charactersPage.info.prev)
 
   const handlePageChange = async (direction: 'next' | 'prev') => {
-    if (isPending) {
+    if (isPending || disabled) {
       return
     }
 
@@ -61,6 +66,10 @@ export const useDesktopPaginatedCharacters = (
   }
 
   const handlePreviousGroup = () => {
+    if (disabled) {
+      return
+    }
+
     if (groupIndex > 0) {
       setGroupIndex((previousGroupIndex) => previousGroupIndex - 1)
       return
@@ -72,6 +81,10 @@ export const useDesktopPaginatedCharacters = (
   }
 
   const handleNextGroup = () => {
+    if (disabled) {
+      return
+    }
+
     if (hasMoreGroupsInPage) {
       setGroupIndex((previousGroupIndex) => previousGroupIndex + 1)
       return
@@ -92,6 +105,10 @@ export const useDesktopPaginatedCharacters = (
   }
 
   useEffect(() => {
+    if (disabled) {
+      return
+    }
+
     const shouldPrefetchNextPage = !hasMoreGroupsInPage && Boolean(charactersPage.info.next)
 
     if (!shouldPrefetchNextPage) {
@@ -121,6 +138,7 @@ export const useDesktopPaginatedCharacters = (
   }, [
     charactersPage.info,
     charactersPage.page,
+    disabled,
     hasMoreGroupsInPage,
     prefetchedNextPage,
   ])
