@@ -3,30 +3,21 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
+import type {
+  CharacterStatus,
+  RickAndMortyCharacter,
+} from '@/types/rick-and-morty'
 import styles from './MobileCharacterCarousel.module.css'
 
-type CharacterStatus = 'Alive' | 'Dead' | 'unknown' | string
-
-type CharacterLocation = {
-  name: string
-  url: string
-}
-
-export type MobileCharacterCarouselItem = {
-  id: number
-  name: string
-  status: CharacterStatus
-  species: string
-  type: string
-  gender: string
-  origin: CharacterLocation
-  location: CharacterLocation
-  image: string
-  episode: string[]
-}
+export type MobileCharacterCarouselItem = RickAndMortyCharacter
 
 type MobileCharacterCarouselProps = {
   characters: MobileCharacterCarouselItem[]
+  hasNextPage?: boolean
+  hasPreviousPage?: boolean
+  isPageLoading?: boolean
+  onRequestNextPage?: () => void
+  onRequestPreviousPage?: () => void
 }
 
 const getStatusClassName = (status: CharacterStatus) => {
@@ -65,7 +56,14 @@ const CarouselArrowIcon = ({ direction }: CarouselArrowIconProps) => {
   )
 }
 
-export const MobileCharacterCarousel = ({ characters }: MobileCharacterCarouselProps) => {
+export const MobileCharacterCarousel = ({
+  characters,
+  hasNextPage = false,
+  hasPreviousPage = false,
+  isPageLoading = false,
+  onRequestNextPage,
+  onRequestPreviousPage,
+}: MobileCharacterCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   if (characters.length === 0) {
@@ -77,20 +75,41 @@ export const MobileCharacterCarousel = ({ characters }: MobileCharacterCarouselP
   const subtitle = getSubtitle(currentCharacter)
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? characters.length - 1 : prevIndex - 1))
+    if (currentIndex === 0) {
+      if (hasPreviousPage) {
+        onRequestPreviousPage?.()
+      }
+
+      return
+    }
+
+    setCurrentIndex((prevIndex) => prevIndex - 1)
   }
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === characters.length - 1 ? 0 : prevIndex + 1))
+    if (currentIndex === characters.length - 1) {
+      if (hasNextPage) {
+        onRequestNextPage?.()
+      }
+
+      return
+    }
+
+    setCurrentIndex((prevIndex) => prevIndex + 1)
   }
 
   return (
-    <section className={styles.carousel} aria-label='Character carousel'>
+    <section
+      className={styles.carousel}
+      aria-label='Character carousel'
+      aria-busy={isPageLoading}
+    >
       <button
         type='button'
         className={`${styles.carouselNavButton} ${styles.carouselNavPrevious}`}
         onClick={handlePrevious}
         aria-label='Show previous character'
+        disabled={isPageLoading}
       >
         <CarouselArrowIcon direction='left' />
       </button>
@@ -169,6 +188,7 @@ export const MobileCharacterCarousel = ({ characters }: MobileCharacterCarouselP
         className={`${styles.carouselNavButton} ${styles.carouselNavNext}`}
         onClick={handleNext}
         aria-label='Show next character'
+        disabled={isPageLoading}
       >
         <CarouselArrowIcon direction='right' />
       </button>

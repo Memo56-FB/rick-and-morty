@@ -1,19 +1,19 @@
 import Image from 'next/image'
 import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
-import type { MobileCharacterCarouselItem } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarousel'
+import type { RickAndMortyCharacter } from '@/types/rick-and-morty'
 import styles from './DesktopCharacterFeature.module.css'
 
 type DesktopCharacterFeatureProps = {
-  character: MobileCharacterCarouselItem
+  character: RickAndMortyCharacter
 }
 
-const getStatusClassName = (status: MobileCharacterCarouselItem['status']) => {
+const getStatusClassName = (status: RickAndMortyCharacter['status']) => {
   if (status === 'Alive') return styles.alive
   if (status === 'Dead') return styles.dead
   return styles.unknown
 }
 
-const getSubtitle = (character: MobileCharacterCarouselItem) => {
+const getSubtitle = (character: RickAndMortyCharacter) => {
   const parts = [character.species, character.type].filter(Boolean)
   return parts.join(' ')
 }

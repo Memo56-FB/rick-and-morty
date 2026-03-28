@@ -2,13 +2,13 @@
 
 import { useState } from 'react'
 import type { FavoriteCharacter } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
-import type { MobileCharacterCarouselItem } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarousel'
+import type { RickAndMortyCharacter } from '@/types/rick-and-morty'
 import { DesktopCharacterFeature } from './DesktopCharacterFeature/DesktopCharacterFeature'
 import { DesktopCharacterSidebar } from './DesktopCharacterSidebar/DesktopCharacterSidebar'
 import styles from './DesktopCharacterShowcase.module.css'
 
 type DesktopCharacterShowcaseProps = {
-  characters: MobileCharacterCarouselItem[]
+  characters: RickAndMortyCharacter[]
   favorites: FavoriteCharacter[]
 }
 

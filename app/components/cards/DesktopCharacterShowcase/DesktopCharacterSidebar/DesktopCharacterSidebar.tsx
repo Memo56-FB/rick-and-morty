@@ -1,12 +1,12 @@
 import { CharacterCard } from '@/app/components/cards/CharacterCard/CharacterCard'
 import { FavoritesPanel, type FavoriteCharacter } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
-import type { MobileCharacterCarouselItem } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarousel'
+import type { RickAndMortyCharacter } from '@/types/rick-and-morty'
 import { DesktopCharacterPager } from '../DesktopCharacterPager/DesktopCharacterPager'
 import styles from './DesktopCharacterSidebar.module.css'
 
 type DesktopCharacterSidebarProps = {
-  characters: MobileCharacterCarouselItem[]
+  characters: RickAndMortyCharacter[]
   favorites: FavoriteCharacter[]
   showPager: boolean
   onPreviousPage: () => void
