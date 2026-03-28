@@ -33,8 +33,11 @@ export const OverflowTooltipText = ({
     }
 
     const checkOverflow = () => {
+      const overflowTolerance = 1
+
       setIsOverflowing(
-        element.scrollWidth > element.clientWidth || element.scrollHeight > element.clientHeight
+        element.scrollWidth - element.clientWidth > overflowTolerance ||
+        element.scrollHeight - element.clientHeight > overflowTolerance
       )
     }
 
