@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import image from '../public/Rick_and_Morty.svg'
+import { mockCharacters } from '@/app/mocks/characters'
 import { MobileCharacterCarousel } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarousel'
 import { CharacterCard } from '@/app/components/cards/CharacterCard/CharacterCard'
 import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
@@ -34,7 +35,7 @@ export default function Home() {
         />
       </div>
       <div className='mt-8 w-full grid place-items-center'>
-        <MobileCharacterCarousel characters={[]} />
+        <MobileCharacterCarousel characters={mockCharacters} />
       </div>
     </section>
   );
