@@ -6,6 +6,19 @@ Puntos destacados:
 - 60% de coverage en los test para las funciones
 - Estructura del proyecto separada por responsabilidades
 
+## Producción
+
+La versión desplegada está disponible en:
+
+```bash
+https://rick-and-morty.memofb.dev/
+```
+## Nota sobre favoritos en producción
+
+Los favoritos SOLO funcionan correctamente en local porque están soportados por `json-server`.
+
+En producción esta función esta deshabilitada.
+
 ## Stack
 
 - `Next.js 16`
