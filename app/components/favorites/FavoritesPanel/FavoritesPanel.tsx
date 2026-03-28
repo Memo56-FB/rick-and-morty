@@ -14,6 +14,7 @@ type FavoritesPanelProps = {
   maxItems?: number
   emptyLabel?: string
   className?: string
+  desktopVisible?: boolean
   onRemoveFavorite?: (favoriteId: FavoriteCharacter['id']) => void
 }
 
@@ -65,13 +66,18 @@ export const FavoritesPanel = ({
   maxItems = 4,
   emptyLabel = 'No favorites yet',
   className = '',
+  desktopVisible = false,
   onRemoveFavorite,
 }: FavoritesPanelProps) => {
   const panelRef = useRef<HTMLElement | null>(null)
   const contentId = useId()
   const [isOpen, setIsOpen] = useState(false)
   const visibleFavorites = favorites.slice(0, maxItems)
-  const containerClassName = [styles.wrapper, className].filter(Boolean).join(' ')
+  const containerClassName = [
+    styles.wrapper,
+    desktopVisible ? styles.desktopVisible : '',
+    className,
+  ].filter(Boolean).join(' ')
   const hasOverflow = favorites.length > maxItems
 
   useEffect(() => {

@@ -17,6 +17,13 @@
   overflow: visible;
 }
 
+.desktopVisible {
+  display: block;
+  --favorites-tab-height: 2.75rem;
+
+  width: min(100%, 13.25rem);
+}
+
 .summary {
   position: relative;
   z-index: 2;
@@ -54,7 +61,7 @@
 .content {
   position: absolute;
   right: 0;
-  bottom: calc(100% - 3.4rem);
+  bottom: calc(100% - var(--favorites-tab-height) + 0.05rem);
   left: 0;
   z-index: 2;
   width: 100%;
@@ -62,6 +69,15 @@
   border-radius: .6rem .6rem 0 0;
   background: var(--favorites-shell);
   box-shadow: 0 -10px 28px -18px var(--favorites-shadow);
+}
+
+.desktopVisible .summary {
+  min-height: var(--favorites-tab-height);
+  padding: 0.55rem 1rem;
+}
+
+.desktopVisible .summaryTitle {
+  font-size: 0.96rem;
 }
 
 .list {
@@ -179,5 +195,9 @@
 @media (min-width: 768px) {
   .wrapper {
     display: none;
+  }
+
+  .desktopVisible {
+    display: block;
   }
 }
