@@ -17,3 +17,19 @@
   height: 3.125rem;
   background: linear-gradient(180deg, #9edf25 0%, #86c313 42%, #5d8705 71%, #1e2e00 100%);
 }
+
+@media (min-width: 768px) {
+  .footer {
+    min-height: 8rem;
+  }
+
+  .backgroundImage {
+    width: 17rem;
+    height: auto;
+    bottom: 5rem;
+  }
+
+  .gradientBar {
+    min-height: 100%;
+  }
+}

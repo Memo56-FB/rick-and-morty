@@ -47,7 +47,7 @@ export default function Home() {
         <MobileCharacterCarousel characters={mockCharacters} />
       </div>
 
-      <div className='hidden w-full flex-1 items-center justify-center py-8 md:flex'>
+      <div className='hidden w-full flex-1 items-center justify-center py-8 md:relative md:z-20 md:-mb-24 md:flex md:py-12'>
         <DesktopCharacterShowcase
           characters={mockCharacters}
           favorites={favoriteCharacters}

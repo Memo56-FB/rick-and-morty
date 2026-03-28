@@ -8,8 +8,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
-  gap: .2rem;
+  gap: .1rem;
   overflow: visible;
+  background-color: black;
+  border-radius: 1.25rem;
 }
 
 @media (min-width: 768px) {
