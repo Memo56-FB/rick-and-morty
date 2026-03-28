@@ -29,10 +29,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="relative min-h-dvh">
+      <body className="relative h-full min-h-dvh">
         <Background />
-        <div className="relative z-10 flex min-h-dvh flex-col">
-          <main className="flex-1 z-10">{children}</main>
+        <div className="relative grid grid-rows-[1fr_auto] min-h-full">
+          <main className="z-10 grid">{children}</main>
           <Footer />
         </div>
       </body>

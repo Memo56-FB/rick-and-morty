@@ -4,10 +4,16 @@ import { mockCharacters } from '@/app/mocks/characters'
 import { MobileCharacterCarousel } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarousel'
 import { CharacterCard } from '@/app/components/cards/CharacterCard/CharacterCard'
 import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
+import { FavoritesPanel } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
+
+const favoriteCharacters = mockCharacters.slice(0, 4).map(({ id, name }) => ({
+  id,
+  name,
+}))
 
 export default function Home() {
   return (
-    <section className='grid place-items-center px-4'>
+    <section className='flex min-h-full w-full flex-col items-center px-4'>
       <Image
         src={image}
         alt='rick y morty'
@@ -36,6 +42,10 @@ export default function Home() {
       </div>
       <div className='mt-8 w-full grid place-items-center'>
         <MobileCharacterCarousel characters={mockCharacters} />
+      </div>
+
+      <div className='mt-auto w-full grid place-items-center pt-8 self-end'>
+        <FavoritesPanel favorites={favoriteCharacters} />
       </div>
     </section>
   );
