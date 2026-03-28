@@ -93,3 +93,29 @@
 .favorite {
   --favorite-color: #ff2e2e;
 }
+
+.desktop {
+  width: 10.25rem;
+  padding: 0.75rem 1.1rem 0.95rem;
+  border-radius: 1.65rem;
+}
+
+.desktop .title {
+  margin-bottom: 0.7rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+}
+
+.desktop .imageFrame {
+  aspect-ratio: 1 / 1.12;
+}
+
+.desktop .favoriteRow {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+}
+
+.desktop .favoriteIcon {
+  width: 1.55rem;
+  height: 1.55rem;
+}

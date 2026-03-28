@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import favoriteIcon from '@/app/assets/favorite_icon.svg'
 import styles from './CharacterCard.module.css'
@@ -7,6 +9,7 @@ type CharacterCardProps = {
   imageSrc: string
   selected?: boolean
   favorite?: boolean
+  size?: 'default' | 'desktop'
 }
 
 export const CharacterCard = ({
@@ -14,8 +17,13 @@ export const CharacterCard = ({
   imageSrc,
   selected = false,
   favorite = false,
+  size = 'default',
 }: CharacterCardProps) => {
-  const cardClassName = [styles.card, selected ? styles.selected : ''].filter(Boolean).join(' ')
+  const cardClassName = [
+    styles.card,
+    selected ? styles.selected : '',
+    size === 'desktop' ? styles.desktop : '',
+  ].filter(Boolean).join(' ')
   const favoriteRowClassName = [styles.favoriteRow, favorite ? styles.favorite : ''].filter(Boolean).join(' ')
   const favoriteLabel = favorite ? `Remove ${name} from favorites` : `Add ${name} to favorites`
 
