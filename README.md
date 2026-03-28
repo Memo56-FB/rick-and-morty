@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rick and Morty
 
-## Getting Started
+Puntos destacados:
+- Búsqueda de personajes con `debounce`
+- Enfoque en `accesibilidad` de los componentes
+- 60% de coverage en los test para las funciones
+- Estructura del proyecto separada por responsabilidades
 
-First, run the development server:
+## Stack
+
+- `Next.js 16`
+- `React 19`
+- `TypeScript`
+- `Redux Toolkit`
+- `json-server`
+- `Vitest`
+- `Testing Library`
+
+## Cómo levantar el proyecto
+
+### 1. Instalar dependencias
+
+```bash
+npm install
+```
+
+### 2. Levantar el servidor fake de favoritos
+
+Para la parte de favoritos usé `json-server`, así que primero hay que levantar ese servicio:
+
+```bash
+npm run server
+```
+
+Eso deja disponible el recurso:
+
+```bash
+http://localhost:3001/favorites
+```
+
+### 3. Levantar la aplicación
+
+En otra terminal, arranca la app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Después puedes abrir:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Cómo correr las pruebas unitarias
 
-## Learn More
+### Ejecutar toda la suite
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run test
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Ejecutar pruebas en modo watch
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run test:watch
+```
 
-## Deploy on Vercel
+### Ejecutar pruebas con coverage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run test:coverage
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Ejecutar UI de vitest
+```bash
+npx vitest --ui --coverage.enabled
+```
+
+Si quieres revisar el coverage en HTML, se genera en:
+
+```bash
+coverage/index.html
+```
+
+## Arquitectura resumida
+
+Intenté mantener una separación de responsabilidades clara para que el proyecto no se volviera difícil de mover conforme fue creciendo:
+
+- `app/components`
+  Componentes de UI y contenedores por feature.
+- `app/hooks`
+  Hooks compartidos como `useDebouncedValue`.
+- `lib/http`
+  Cliente HTTP reutilizable.
+- `lib/rick-and-morty`
+  Cliente, servicio y mapeos para la API externa.
+- `lib/favorites`
+  Servicio para favoritos persistidos con `json-server`.
+- `lib/store`
+  Estado global con `Redux Toolkit`.
+- `types`
+  Tipos compartidos en archivos `.d.ts`.
+
+## Qué fue lo que más me gustó del desarrollo
+
+Lo que más disfruté fue poder cuidar tanto la parte visual como la parte interna del proyecto. Me interesaba que no se quedara solo en “verse bien”, sino que también tuviera atención a detalles de interacción, accesibilidad, estados visuales y pequeños comportamientos que hacen que la experiencia se sienta más pulida.
+
+También disfruté darle una estructura mantenible. Fui separando componentes presentacionales, contenedores, hooks, servicios, store y tipos compartidos para que cada pieza tuviera una responsabilidad concreta. Eso ayudó a que el proyecto quedara más claro, más escalable y más cómodo de mantener.
+
+## Si hubiera tenido más tiempo
+
+Si hubiera tenido un poco más de tiempo, me habría gustado profundizar en estas áreas:
+
+- Aumentar la cobertura de pruebas en hooks y contenedores grandes.
+- Reemplazar `json-server` en producción por una solución persistente compatible con serverless, por ejemplo Supabase o Neon.
+- Añadir estados de loading, empty state y error más ricos visualmente.
+- Mejorar accesibilidad en algunas interacciones visuales, con validaciones más profundas de foco y navegación por teclado.
+- Añadir pruebas E2E para validar el flujo completo de favoritos, búsqueda y cambio de páginas.
+
+## Reto de implementación y cómo lo resolví
+
+Más que un bug puntual, el reto principal fue el tiempo. No tuve tanto margen para hacer una planeación tan detallada como me habría gustado desde el arranque, así que empecé con una base mínima funcional y, conforme el proyecto fue creciendo, fui refinando la arquitectura al mismo tiempo que avanzaba con la implementación.
+
+Eso me obligó a ir tomando decisiones de estructura sobre la marcha: separar responsabilidades, extraer hooks compartidos, desacoplar servicios de la UI, dividir contenedores y componentes presentacionales, y reorganizar partes del código cuando empezaban a asumir demasiadas tareas. En vez de dejar que la complejidad creciera sin control, traté de usar cada nueva funcionalidad como oportunidad para ordenar mejor el proyecto.
+
+Al final, ese proceso ayudó a que el proyecto no solo cumpliera con la funcionalidad pedida, sino que también terminara con una base más limpia, entendible y lista para seguir creciendo.
