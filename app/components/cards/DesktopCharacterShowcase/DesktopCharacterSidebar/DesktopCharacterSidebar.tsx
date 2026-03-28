@@ -7,16 +7,22 @@ import styles from './DesktopCharacterSidebar.module.css'
 
 type DesktopCharacterSidebarProps = {
   characters: RickAndMortyCharacter[]
+  currentCharacterId: number
   favorites: FavoriteCharacter[]
+  isLoadingPage?: boolean
   showPager: boolean
+  onSelectCharacter: (characterId: number) => void
   onPreviousPage: () => void
   onNextPage: () => void
 }
 
 export const DesktopCharacterSidebar = ({
   characters,
+  currentCharacterId,
   favorites,
+  isLoadingPage = false,
   showPager,
+  onSelectCharacter,
   onPreviousPage,
   onNextPage,
 }: DesktopCharacterSidebarProps) => {
@@ -28,20 +34,22 @@ export const DesktopCharacterSidebar = ({
 
       <div className={styles.cardArea}>
         <div className={styles.cardGrid}>
-          {characters.map((character, index) => (
+          {characters.map((character) => (
             <CharacterCard
               key={character.id}
               name={character.name}
               imageSrc={character.image}
-              selected={index === 0}
+              selected={character.id === currentCharacterId}
               favorite={favorites.some((favoriteCharacter) => favoriteCharacter.id === character.id)}
               size='desktop'
+              onSelect={() => onSelectCharacter(character.id)}
             />
           ))}
         </div>
 
         {showPager ? (
           <DesktopCharacterPager
+            disabled={isLoadingPage}
             onPrevious={onPreviousPage}
             onNext={onNextPage}
           />

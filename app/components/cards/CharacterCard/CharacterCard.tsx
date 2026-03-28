@@ -1,5 +1,6 @@
 'use client'
 
+import type { KeyboardEvent } from 'react'
 import Image from 'next/image'
 import favoriteIcon from '@/app/assets/favorite_icon.svg'
 import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
@@ -11,6 +12,7 @@ type CharacterCardProps = {
   selected?: boolean
   favorite?: boolean
   size?: 'default' | 'desktop'
+  onSelect?: () => void
 }
 
 export const CharacterCard = ({
@@ -19,17 +21,38 @@ export const CharacterCard = ({
   selected = false,
   favorite = false,
   size = 'default',
+  onSelect,
 }: CharacterCardProps) => {
   const cardClassName = [
     styles.card,
     selected ? styles.selected : '',
     size === 'desktop' ? styles.desktop : '',
+    onSelect ? styles.interactive : '',
   ].filter(Boolean).join(' ')
   const favoriteRowClassName = [styles.favoriteRow, favorite ? styles.favorite : ''].filter(Boolean).join(' ')
   const favoriteLabel = favorite ? `Remove ${name} from favorites` : `Add ${name} to favorites`
+  const isInteractive = Boolean(onSelect)
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (!onSelect) {
+      return
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onSelect()
+    }
+  }
 
   return (
-    <article className={cardClassName}>
+    <article
+      className={cardClassName}
+      onClick={onSelect}
+      onKeyDown={handleKeyDown}
+      role={isInteractive ? 'button' : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      aria-pressed={isInteractive ? selected : undefined}
+    >
       <OverflowTooltipText
         text={name}
         as='h2'

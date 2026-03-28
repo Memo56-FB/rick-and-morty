@@ -1,6 +1,7 @@
 import styles from './DesktopCharacterPager.module.css'
 
 type DesktopCharacterPagerProps = {
+  disabled?: boolean
   onPrevious: () => void
   onNext: () => void
 }
@@ -31,6 +32,7 @@ const DesktopArrowIcon = ({ direction }: DesktopArrowIconProps) => {
 }
 
 export const DesktopCharacterPager = ({
+  disabled = false,
   onPrevious,
   onNext,
 }: DesktopCharacterPagerProps) => {
@@ -41,6 +43,7 @@ export const DesktopCharacterPager = ({
         className={styles.pagerButton}
         onClick={onPrevious}
         aria-label='Show previous group of characters'
+        disabled={disabled}
       >
         <DesktopArrowIcon direction='up' />
       </button>
@@ -50,6 +53,7 @@ export const DesktopCharacterPager = ({
         className={styles.pagerButton}
         onClick={onNext}
         aria-label='Show next group of characters'
+        disabled={disabled}
       >
         <DesktopArrowIcon direction='down' />
       </button>

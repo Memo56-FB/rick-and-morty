@@ -24,6 +24,15 @@
   transform: translateY(-1px);
 }
 
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:focus-visible {
+  outline: 2px solid var(--card-accent);
+  outline-offset: 0.2rem;
+}
+
 .selected {
   --card-border: var(--card-accent);
 }

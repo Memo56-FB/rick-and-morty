@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import image from '../public/Rick_and_Morty.svg'
 import { mockCharacters } from '@/app/mocks/characters'
-import { DesktopCharacterShowcase } from '@/app/components/cards/DesktopCharacterShowcase/DesktopCharacterShowcase'
+import { DesktopCharacterShowcaseContainer } from '@/app/components/cards/DesktopCharacterShowcase/DesktopCharacterShowcaseContainer'
 import { MobileCharacterCarouselContainer } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarouselContainer'
 import { FavoritesPanel } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import { getCharactersPage } from '@/lib/rick-and-morty/rick-and-morty.service'
@@ -34,8 +34,8 @@ export default async function Home() {
       </div>
 
       <div className='hidden w-full flex-1 items-center justify-center py-8 md:relative md:z-20 md:-mb-24 md:flex md:py-12'>
-        <DesktopCharacterShowcase
-          characters={mockCharacters}
+        <DesktopCharacterShowcaseContainer
+          initialCharactersPage={initialCharactersPage}
           favorites={favoriteCharacters}
         />
       </div>

@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import type { FavoriteCharacter } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import type { RickAndMortyCharacter } from '@/types/rick-and-morty'
 import { DesktopCharacterFeature } from './DesktopCharacterFeature/DesktopCharacterFeature'
@@ -9,50 +8,38 @@ import styles from './DesktopCharacterShowcase.module.css'
 
 type DesktopCharacterShowcaseProps = {
   characters: RickAndMortyCharacter[]
+  currentCharacter: RickAndMortyCharacter
   favorites: FavoriteCharacter[]
+  isLoadingPage?: boolean
+  showPager: boolean
+  onSelectCharacter: (characterId: number) => void
+  onPreviousPage: () => void
+  onNextPage: () => void
 }
-
-const PAGE_SIZE = 4
 
 export const DesktopCharacterShowcase = ({
   characters,
+  currentCharacter,
   favorites,
+  isLoadingPage = false,
+  showPager,
+  onSelectCharacter,
+  onPreviousPage,
+  onNextPage,
 }: DesktopCharacterShowcaseProps) => {
-  const [pageIndex, setPageIndex] = useState(0)
-
-  if (characters.length === 0) {
-    return null
-  }
-
-  const totalPages = Math.ceil(characters.length / PAGE_SIZE)
-  const pageStart = pageIndex * PAGE_SIZE
-  const visibleCharacters = characters.slice(pageStart, pageStart + PAGE_SIZE)
-  const currentCharacter = visibleCharacters[0] ?? characters[0]
-
-  const handlePreviousPage = () => {
-    setPageIndex((previousPageIndex) => {
-      const nextPageIndex = previousPageIndex === 0 ? totalPages - 1 : previousPageIndex - 1
-      return nextPageIndex
-    })
-  }
-
-  const handleNextPage = () => {
-    setPageIndex((previousPageIndex) => {
-      const nextPageIndex = previousPageIndex === totalPages - 1 ? 0 : previousPageIndex + 1
-      return nextPageIndex
-    })
-  }
-
   return (
     <section className={styles.desktopShowcase} aria-label='Desktop character showcase'>
       <div className={styles.board}>
         <DesktopCharacterFeature character={currentCharacter} />
         <DesktopCharacterSidebar
-          characters={visibleCharacters}
+          characters={characters}
+          currentCharacterId={currentCharacter.id}
           favorites={favorites}
-          showPager={totalPages > 1}
-          onPreviousPage={handlePreviousPage}
-          onNextPage={handleNextPage}
+          isLoadingPage={isLoadingPage}
+          showPager={showPager}
+          onSelectCharacter={onSelectCharacter}
+          onPreviousPage={onPreviousPage}
+          onNextPage={onNextPage}
         />
       </div>
     </section>
