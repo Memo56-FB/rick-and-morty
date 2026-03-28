@@ -6,7 +6,7 @@
   --favorite-color: #ffffff;
 
   width: 9rem;
-  padding: .5rem 1.5rem;
+  padding: .5rem 2rem;
   border: 2px solid var(--card-border);
   border-radius: 2rem;
   background: var(--card-bg);
@@ -29,12 +29,17 @@
 }
 
 .title {
+  display: block;
+  width: 100%;
   margin: 0 0 0.8rem;
   text-align: center;
   font-size: 1.05rem;
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .imageFrame {
@@ -95,8 +100,8 @@
 }
 
 .desktop {
-  width: 10.25rem;
-  padding: 0.75rem 1.1rem 0.95rem;
+  width: 12.25rem;
+  padding: .5rem 1.3rem;
   border-radius: 1.65rem;
 }
 
@@ -104,10 +109,6 @@
   margin-bottom: 0.7rem;
   font-size: 0.78rem;
   letter-spacing: 0.14em;
-}
-
-.desktop .imageFrame {
-  aspect-ratio: 1 / 1.12;
 }
 
 .desktop .favoriteRow {
@@ -118,4 +119,27 @@
 .desktop .favoriteIcon {
   width: 1.55rem;
   height: 1.55rem;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .desktop {
+    width: 9.4rem;
+    padding: 0.6rem 0.8rem 0.75rem;
+    border-radius: 1.4rem;
+  }
+
+  .desktop .title {
+    margin-bottom: 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  .desktop .favoriteRow {
+    margin-top: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .desktop .favoriteIcon {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
 }

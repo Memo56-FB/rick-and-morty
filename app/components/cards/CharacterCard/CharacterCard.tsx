@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import favoriteIcon from '@/app/assets/favorite_icon.svg'
+import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
 import styles from './CharacterCard.module.css'
 
 type CharacterCardProps = {
@@ -29,7 +30,11 @@ export const CharacterCard = ({
 
   return (
     <article className={cardClassName}>
-      <h2 className={styles.title}>{name}</h2>
+      <OverflowTooltipText
+        text={name}
+        as='h2'
+        className={styles.title}
+      />
 
       <div className={styles.imageFrame}>
         <Image
