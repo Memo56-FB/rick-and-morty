@@ -1,6 +1,3 @@
-'use client'
-
-import { useState } from 'react'
 import Image from 'next/image'
 import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
 import type {
@@ -13,11 +10,10 @@ export type MobileCharacterCarouselItem = RickAndMortyCharacter
 
 type MobileCharacterCarouselProps = {
   characters: MobileCharacterCarouselItem[]
-  hasNextPage?: boolean
-  hasPreviousPage?: boolean
+  currentIndex: number
   isPageLoading?: boolean
-  onRequestNextPage?: () => void
-  onRequestPreviousPage?: () => void
+  onRequestNext?: () => void
+  onRequestPrevious?: () => void
 }
 
 const getStatusClassName = (status: CharacterStatus) => {
@@ -58,14 +54,11 @@ const CarouselArrowIcon = ({ direction }: CarouselArrowIconProps) => {
 
 export const MobileCharacterCarousel = ({
   characters,
-  hasNextPage = false,
-  hasPreviousPage = false,
+  currentIndex,
   isPageLoading = false,
-  onRequestNextPage,
-  onRequestPreviousPage,
+  onRequestNext,
+  onRequestPrevious,
 }: MobileCharacterCarouselProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-
   if (characters.length === 0) {
     return null
   }
@@ -75,27 +68,11 @@ export const MobileCharacterCarousel = ({
   const subtitle = getSubtitle(currentCharacter)
 
   const handlePrevious = () => {
-    if (currentIndex === 0) {
-      if (hasPreviousPage) {
-        onRequestPreviousPage?.()
-      }
-
-      return
-    }
-
-    setCurrentIndex((prevIndex) => prevIndex - 1)
+    onRequestPrevious?.()
   }
 
   const handleNext = () => {
-    if (currentIndex === characters.length - 1) {
-      if (hasNextPage) {
-        onRequestNextPage?.()
-      }
-
-      return
-    }
-
-    setCurrentIndex((prevIndex) => prevIndex + 1)
+    onRequestNext?.()
   }
 
   return (

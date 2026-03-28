@@ -3,7 +3,6 @@ import image from '../public/Rick_and_Morty.svg'
 import { mockCharacters } from '@/app/mocks/characters'
 import { DesktopCharacterShowcase } from '@/app/components/cards/DesktopCharacterShowcase/DesktopCharacterShowcase'
 import { MobileCharacterCarouselContainer } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarouselContainer'
-import { CharacterCard } from '@/app/components/cards/CharacterCard/CharacterCard'
 import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
 import { FavoritesPanel } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import { getCharactersPage } from '@/lib/rick-and-morty/rick-and-morty.service'
@@ -33,20 +32,7 @@ export default async function Home() {
         <CharacterSearch />
       </div>
 
-
-      <div className='mt-10 flex flex-wrap items-start justify-center gap-2.5 md:hidden'>
-        <CharacterCard
-          name='Rick'
-          imageSrc='/characters/rick.jpeg'
-          selected
-          favorite
-        />
-        <CharacterCard
-          name='Morty'
-          imageSrc='/characters/morty.jpeg'
-        />
-      </div>
-      <div className='mt-8 w-full grid place-items-center md:hidden'>
+      <div className='md:hidden'>
         <MobileCharacterCarouselContainer
           initialCharactersPage={initialCharactersPage}
         />
