@@ -1,8 +1,8 @@
 'use client'
 
-import { type RefObject, useEffect, useId, useRef, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
-import { createPortal } from 'react-dom'
+import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
 import styles from './MobileCharacterCarousel.module.css'
 
 type CharacterStatus = 'Alive' | 'Dead' | 'unknown' | string
@@ -38,139 +38,6 @@ const getStatusClassName = (status: CharacterStatus) => {
 const getSubtitle = (character: MobileCharacterCarouselItem) => {
   const parts = [character.species, character.type].filter(Boolean)
   return parts.join(' ')
-}
-
-type OverflowTooltipTextProps = {
-  text: string
-  as?: 'span' | 'p' | 'h2'
-  className: string
-  wrapperClassName?: string
-}
-
-const OverflowTooltipText = ({
-  text,
-  as = 'span',
-  className,
-  wrapperClassName = '',
-}: OverflowTooltipTextProps) => {
-  const textRef = useRef<HTMLElement | null>(null)
-  const tooltipId = useId()
-  const [isOverflowing, setIsOverflowing] = useState(false)
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false)
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
-
-  useEffect(() => {
-    const element = textRef.current
-
-    if (!element) {
-      return
-    }
-
-    const checkOverflow = () => {
-      setIsOverflowing(
-        element.scrollWidth > element.clientWidth || element.scrollHeight > element.clientHeight
-      )
-    }
-
-    checkOverflow()
-
-    const resizeObserver = new ResizeObserver(checkOverflow)
-    resizeObserver.observe(element)
-
-    return () => {
-      resizeObserver.disconnect()
-    }
-  }, [text])
-
-  useEffect(() => {
-    if (!isTooltipOpen) {
-      return
-    }
-
-    const updateTooltipPosition = () => {
-      const element = textRef.current
-
-      if (!element) {
-        return
-      }
-
-      const rect = element.getBoundingClientRect()
-      setTooltipPosition({
-        top: Math.max(rect.top - 10, 8),
-        left: rect.left + rect.width / 2,
-      })
-    }
-
-    updateTooltipPosition()
-
-    window.addEventListener('resize', updateTooltipPosition)
-    window.addEventListener('scroll', updateTooltipPosition, true)
-
-    return () => {
-      window.removeEventListener('resize', updateTooltipPosition)
-      window.removeEventListener('scroll', updateTooltipPosition, true)
-    }
-  }, [isTooltipOpen])
-
-  const Component = as
-  const shouldShowTooltip = isOverflowing && isTooltipOpen
-
-  const openTooltip = () => {
-    if (isOverflowing) {
-      setIsTooltipOpen(true)
-    }
-  }
-
-  const closeTooltip = () => {
-    setIsTooltipOpen(false)
-  }
-
-  return (
-    <span
-      className={`${styles.tooltipTrigger} ${wrapperClassName}`.trim()}
-      tabIndex={isOverflowing ? 0 : -1}
-      aria-describedby={isOverflowing ? tooltipId : undefined}
-      onMouseEnter={openTooltip}
-      onMouseLeave={closeTooltip}
-      onFocus={openTooltip}
-      onBlur={closeTooltip}
-    >
-      {Component === 'h2' ? (
-        <h2 ref={textRef as RefObject<HTMLHeadingElement>} className={className}>
-          {text}
-        </h2>
-      ) : null}
-
-      {Component === 'p' ? (
-        <p ref={textRef as RefObject<HTMLParagraphElement>} className={className}>
-          {text}
-        </p>
-      ) : null}
-
-      {Component === 'span' ? (
-        <span ref={textRef as RefObject<HTMLSpanElement>} className={className}>
-          {text}
-        </span>
-      ) : null}
-
-      {shouldShowTooltip && typeof document !== 'undefined'
-        ? createPortal(
-            <span
-              id={tooltipId}
-              role='tooltip'
-              className={styles.tooltipBubble}
-              style={{
-                top: `${tooltipPosition.top}px`,
-                left: `${tooltipPosition.left}px`,
-              }}
-            >
-              {text}
-            </span>,
-            document.body
-          )
-        : null}
-    </span>
-  )
 }
 
 type CarouselArrowIconProps = {

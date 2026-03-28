@@ -1,0 +1,38 @@
+.trigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.bubble {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999;
+  width: max-content;
+  max-width: calc(100vw - 1.5rem);
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(127, 225, 19, 0.45);
+  border-radius: 0.85rem;
+  background: rgba(28, 28, 28, 0.96);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.34);
+  color: #f3f3f3;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  white-space: normal;
+  word-break: break-word;
+  transform: translate(-50%, -100%);
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 1px solid rgba(127, 225, 19, 0.45);
+  border-bottom: 1px solid rgba(127, 225, 19, 0.45);
+  background: rgba(28, 28, 28, 0.96);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
