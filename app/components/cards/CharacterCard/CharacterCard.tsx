@@ -1,27 +1,33 @@
 'use client'
 
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent, MouseEvent } from 'react'
 import Image from 'next/image'
 import favoriteIcon from '@/app/assets/favorite_icon.svg'
 import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
 import styles from './CharacterCard.module.css'
 
 type CharacterCardProps = {
+  characterId?: number
   name: string
   imageSrc: string
   selected?: boolean
   favorite?: boolean
+  favoriteDisabled?: boolean
   size?: 'default' | 'desktop'
   onSelect?: () => void
+  onToggleFavorite?: () => void
 }
 
 export const CharacterCard = ({
+  characterId,
   name,
   imageSrc,
   selected = false,
   favorite = false,
+  favoriteDisabled = false,
   size = 'default',
   onSelect,
+  onToggleFavorite,
 }: CharacterCardProps) => {
   const cardClassName = [
     styles.card,
@@ -42,6 +48,11 @@ export const CharacterCard = ({
       event.preventDefault()
       onSelect()
     }
+  }
+
+  const handleFavoriteClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    onToggleFavorite?.()
   }
 
   return (
@@ -71,13 +82,16 @@ export const CharacterCard = ({
 
       <div className={favoriteRowClassName}>
         <button
-          type="button"
+          type='button'
           aria-label={favoriteLabel}
           aria-pressed={favorite}
           className={styles.favoriteButton}
+          disabled={!onToggleFavorite || favoriteDisabled}
+          onClick={handleFavoriteClick}
+          data-character-id={characterId}
         >
           <span
-            aria-hidden="true"
+            aria-hidden='true'
             className={styles.favoriteIcon}
             style={{ ['--favorite-icon' as string]: `url(${favoriteIcon.src})` }}
           />

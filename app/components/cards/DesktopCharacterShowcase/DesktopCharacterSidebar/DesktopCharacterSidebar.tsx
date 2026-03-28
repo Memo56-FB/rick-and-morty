@@ -1,6 +1,6 @@
 import type { ChangeEventHandler } from 'react'
 import { CharacterCard } from '@/app/components/cards/CharacterCard/CharacterCard'
-import { FavoritesPanel, type FavoriteCharacter } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
+import { FavoritesPanelContainer } from '@/app/components/favorites/FavoritesPanel/FavoritesPanelContainer'
 import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
 import type { RickAndMortyCharacter } from '@/types/rick-and-morty'
 import { DesktopCharacterPager } from '../DesktopCharacterPager/DesktopCharacterPager'
@@ -9,12 +9,14 @@ import styles from './DesktopCharacterSidebar.module.css'
 type DesktopCharacterSidebarProps = {
   characters: RickAndMortyCharacter[]
   currentCharacterId: number
-  favorites: FavoriteCharacter[]
+  favoriteCharacterIds: Set<number>
   isLoadingPage?: boolean
+  isFavoritePending: (characterId: number) => boolean
   searchQuery: string
   showPager: boolean
   onSearchChange: ChangeEventHandler<HTMLInputElement>
   onSelectCharacter: (characterId: number) => void
+  onToggleFavorite: (character: RickAndMortyCharacter) => void
   onPreviousPage: () => void
   onNextPage: () => void
 }
@@ -22,12 +24,14 @@ type DesktopCharacterSidebarProps = {
 export const DesktopCharacterSidebar = ({
   characters,
   currentCharacterId,
-  favorites,
+  favoriteCharacterIds,
   isLoadingPage = false,
+  isFavoritePending,
   searchQuery,
   showPager,
   onSearchChange,
   onSelectCharacter,
+  onToggleFavorite,
   onPreviousPage,
   onNextPage,
 }: DesktopCharacterSidebarProps) => {
@@ -45,12 +49,15 @@ export const DesktopCharacterSidebar = ({
           {characters.map((character) => (
             <CharacterCard
               key={character.id}
+              characterId={character.id}
               name={character.name}
               imageSrc={character.image}
               selected={character.id === currentCharacterId}
-              favorite={favorites.some((favoriteCharacter) => favoriteCharacter.id === character.id)}
+              favorite={favoriteCharacterIds.has(character.id)}
+              favoriteDisabled={isFavoritePending(character.id)}
               size='desktop'
               onSelect={() => onSelectCharacter(character.id)}
+              onToggleFavorite={() => onToggleFavorite(character)}
             />
           ))}
         </div>
@@ -65,8 +72,7 @@ export const DesktopCharacterSidebar = ({
       </div>
 
       <div className={styles.favoritesDock}>
-        <FavoritesPanel
-          favorites={favorites}
+        <FavoritesPanelContainer
           className={styles.favoritesPanel}
           desktopVisible
         />

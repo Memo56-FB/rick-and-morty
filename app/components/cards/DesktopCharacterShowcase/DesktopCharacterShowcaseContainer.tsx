@@ -1,24 +1,27 @@
 'use client'
 
 import { useState } from 'react'
-import type { FavoriteCharacter } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import { DesktopCharacterShowcase } from '@/app/components/cards/DesktopCharacterShowcase/DesktopCharacterShowcase'
+import { useFavorites } from '@/app/hooks/useFavorites'
 import { useDesktopCharacterSearch } from './hooks/useDesktopCharacterSearch'
 import { useDesktopPaginatedCharacters } from './hooks/useDesktopPaginatedCharacters'
 import type { CharactersPage } from '@/types/rick-and-morty'
 
 type DesktopCharacterShowcaseContainerProps = {
-  favorites: FavoriteCharacter[]
   initialCharactersPage: CharactersPage
 }
 
 export const DesktopCharacterShowcaseContainer = ({
-  favorites,
   initialCharactersPage,
 }: DesktopCharacterShowcaseContainerProps) => {
   const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(
     null
   )
+  const {
+    favoriteCharacterIds,
+    isFavoritePending,
+    toggleFavorite,
+  } = useFavorites()
   const searchCharacters = useDesktopCharacterSearch()
   const paginatedCharacters = useDesktopPaginatedCharacters(initialCharactersPage, {
     disabled: searchCharacters.hasQuery,
@@ -51,12 +54,14 @@ export const DesktopCharacterShowcaseContainer = ({
     <DesktopCharacterShowcase
       currentCharacter={currentCharacter}
       characters={activeCharacters}
-      favorites={favorites}
+      favoriteCharacterIds={favoriteCharacterIds}
       searchQuery={searchCharacters.searchQuery}
       showPager={showPager}
       isLoadingPage={isLoadingPage}
+      isFavoritePending={isFavoritePending}
       onSearchChange={searchCharacters.handleSearchChange}
       onSelectCharacter={setSelectedCharacterId}
+      onToggleFavorite={toggleFavorite}
       onPreviousPage={handlePreviousGroup}
       onNextPage={handleNextGroup}
     />

@@ -2,12 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { OverflowTooltipText } from '@/app/components/ui/OverflowTooltipText/OverflowTooltipText'
+import type { FavoriteCharacter } from '@/types/favorites'
 import styles from './FavoritesPanel.module.css'
-
-export type FavoriteCharacter = {
-  id: number | string
-  name: string
-}
 
 type FavoritesPanelProps = {
   favorites: FavoriteCharacter[]

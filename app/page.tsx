@@ -1,15 +1,9 @@
 import Image from 'next/image';
 import image from '../public/Rick_and_Morty.svg'
-import { mockCharacters } from '@/app/mocks/characters'
 import { DesktopCharacterShowcaseContainer } from '@/app/components/cards/DesktopCharacterShowcase/DesktopCharacterShowcaseContainer'
 import { MobileCharacterCarouselContainer } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarouselContainer'
-import { FavoritesPanel } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
+import { FavoritesPanelContainer } from '@/app/components/favorites/FavoritesPanel/FavoritesPanelContainer'
 import { getCharactersPage } from '@/lib/rick-and-morty/rick-and-morty.service'
-
-const favoriteCharacters = mockCharacters.slice(0, 4).map(({ id, name }) => ({
-  id,
-  name,
-}))
 
 export default async function Home() {
   const initialCharactersPage = await getCharactersPage()
@@ -36,12 +30,11 @@ export default async function Home() {
       <div className='hidden w-full flex-1 items-center justify-center py-8 md:relative md:z-20 md:-mb-24 md:flex md:py-12'>
         <DesktopCharacterShowcaseContainer
           initialCharactersPage={initialCharactersPage}
-          favorites={favoriteCharacters}
         />
       </div>
 
       <div className='mt-auto w-full grid place-items-center pt-8 self-end md:hidden'>
-        <FavoritesPanel favorites={favoriteCharacters} />
+        <FavoritesPanelContainer />
       </div>
     </section>
   );

@@ -3,6 +3,7 @@
 import { MobileCharacterCarousel } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarousel'
 import { MobileCharacterCardsPreview } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCardsPreview'
 import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
+import { useFavorites } from '@/app/hooks/useFavorites'
 import { useMobileCharacterSearch } from './hooks/useMobileCharacterSearch'
 import { usePaginatedCharacters } from './hooks/usePaginatedCharacters'
 import type { CharactersPage } from '@/types/rick-and-morty'
@@ -14,6 +15,11 @@ type MobileCharacterCarouselContainerProps = {
 export const MobileCharacterCarouselContainer = ({
   initialCharactersPage,
 }: MobileCharacterCarouselContainerProps) => {
+  const {
+    favoriteCharacterIds,
+    isFavoritePending,
+    toggleFavorite,
+  } = useFavorites()
   const searchCharacters = useMobileCharacterSearch()
   const paginatedCharacters = usePaginatedCharacters(initialCharactersPage, {
     disabled: searchCharacters.isSearchMode,
@@ -58,6 +64,9 @@ export const MobileCharacterCarouselContainer = ({
           <MobileCharacterCardsPreview
             currentCharacter={currentCharacter}
             nextCharacter={nextCharacter}
+            favoriteCharacterIds={favoriteCharacterIds}
+            isFavoritePending={isFavoritePending}
+            onToggleFavorite={toggleFavorite}
           />
 
           <div className='mt-8 w-full grid place-items-center'>

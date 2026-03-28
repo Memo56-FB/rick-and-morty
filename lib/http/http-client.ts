@@ -28,8 +28,14 @@ type CreateHttpClientOptions = {
 }
 
 type HttpClient = {
+  delete: <TResponse>(path: string, config?: HttpRequestConfig) => Promise<TResponse>
   get: <TResponse>(
     path: string,
+    config?: HttpRequestConfig
+  ) => Promise<TResponse>
+  post: <TResponse, TBody>(
+    path: string,
+    body: TBody,
     config?: HttpRequestConfig
   ) => Promise<TResponse>
 }
@@ -67,6 +73,7 @@ const mergeHeaders = (
 }
 
 const executeRequest = async <TResponse>(
+  method: RequestInit['method'],
   path: string,
   config: HttpRequestConfig,
   options: CreateHttpClientOptions
@@ -77,7 +84,7 @@ const executeRequest = async <TResponse>(
     url: buildUrl(options.baseUrl, path, params),
     init: {
       ...requestInit,
-      method: 'GET',
+      method,
       headers: mergeHeaders(options.defaultConfig?.headers, headers),
     },
   }
@@ -100,21 +107,46 @@ const executeRequest = async <TResponse>(
     response = await interceptor.onResponse(response, context)
   }
 
+  if (response.status === 204) {
+    return undefined as TResponse
+  }
+
+  const contentType = response.headers.get('content-type') ?? ''
+
+  if (!contentType.includes('application/json')) {
+    return undefined as TResponse
+  }
+
   return response.json() as Promise<TResponse>
 }
 
 export const createHttpClient = (
   options: CreateHttpClientOptions
 ): HttpClient => {
-  return {
-    get: <TResponse>(path: string, config: HttpRequestConfig = {}) => {
+  const createRequestMethod = (method: RequestInit['method']) => {
+    return <TResponse>(path: string, config: HttpRequestConfig = {}) => {
       const mergedConfig: HttpRequestConfig = {
         ...options.defaultConfig,
         ...config,
         headers: mergeHeaders(options.defaultConfig?.headers, config.headers),
       }
 
-      return executeRequest<TResponse>(path, mergedConfig, options)
+      return executeRequest<TResponse>(method, path, mergedConfig, options)
+    }
+  }
+
+  return {
+    delete: createRequestMethod('DELETE'),
+    get: createRequestMethod('GET'),
+    post: <TResponse, TBody>(
+      path: string,
+      body: TBody,
+      config: HttpRequestConfig = {}
+    ) => {
+      return createRequestMethod('POST')<TResponse>(path, {
+        ...config,
+        body: JSON.stringify(body),
+      })
     },
   }
 }
