@@ -1,0 +1,282 @@
+.carousel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0;
+  width: min(100%, 28rem);
+}
+
+.carouselViewport {
+  position: relative;
+  overflow: visible;
+}
+
+.imageFrame {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 2rem;
+}
+
+.imageFrame::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  width: 14%;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.32) 42%, rgba(0, 0, 0, 0.12) 68%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.imageFrame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  height: 14%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.32) 42%, rgba(0, 0, 0, 0.12) 68%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.characterImage {
+  object-fit: cover;
+}
+
+.statusBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem;
+  border-radius: 1rem;
+  background: rgba(51, 51, 51, 0.95);
+  color: #f4f4f4;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding-right: 4.5rem;
+  max-width: calc(100% - 2rem);
+  min-width: 0;
+}
+
+.statusText {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.statusTextContainer {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.statusDot {
+  width: 1.4rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, currentColor 0%, color-mix(in srgb, currentColor 35%, black 65%) 100%);
+  animation: statusBlink 1.8s ease-in-out infinite;
+}
+
+.alive {
+  color: #b6ff18;
+}
+
+.dead {
+  color: #ff5959;
+}
+
+.unknown {
+  color: #c7c7c7;
+}
+
+.contentOverlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  padding: 1rem;
+  background: #141414c5;
+  color: #f1f1f1;
+}
+
+.characterName {
+  display: block;
+  width: 100%;
+  margin: 0;
+  color: #7fe113;
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.characterSubtitle {
+  display: block;
+  width: 100%;
+  margin: 0.35rem 0 1rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1rem;
+  line-height: 1.15;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+.detailsGrid > div {
+  min-width: 0;
+}
+
+.detailLabel {
+  display: block;
+  width: 100%;
+  color: #7fe113;
+  font-size: 1rem;
+  margin-bottom: .5rem;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detailValue {
+  display: block;
+  width: 100%;
+  margin: 0;
+  color: #f3f3f3;
+  font-size: 1rem;
+  line-height: 1.15;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tooltipTrigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.tooltipBubble {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999;
+  width: max-content;
+  max-width: calc(100vw - 1.5rem);
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(127, 225, 19, 0.45);
+  border-radius: 0.85rem;
+  background: rgba(28, 28, 28, 0.96);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.34);
+  color: #f3f3f3;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  white-space: normal;
+  word-break: break-word;
+  transform: translate(-50%, -100%);
+}
+
+.tooltipBubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 1px solid rgba(127, 225, 19, 0.45);
+  border-bottom: 1px solid rgba(127, 225, 19, 0.45);
+  background: rgba(28, 28, 28, 0.96);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.carouselNavButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  place-self: center;
+  width: 32px;
+  height: 40px;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #7b7b7b;
+  color: #ffffff;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.carouselNavButton:hover {
+  color: #76dd00;
+}
+
+.carouselNavButton:active {
+  background: #5b5454;
+  color: #76dd00;
+  transform: scale(0.96);
+}
+
+.carouselNavButton:focus-visible {
+  outline: 2px solid #7fe113;
+  outline-offset: 2px;
+}
+
+.carouselNavIcon {
+  width: 24px;
+  height: 24px;
+  overflow: visible;
+  transition:
+    transform 160ms ease;
+}
+
+.carouselNavIconPrev {
+  transform: rotate(180deg);
+}
+
+.carouselNavPrevious {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.carouselNavNext {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+@keyframes statusBlink {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (min-width: 768px) {
+  .carousel {
+    display: none;
+  }
+}
