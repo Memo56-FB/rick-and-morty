@@ -3,7 +3,6 @@ import image from '../public/Rick_and_Morty.svg'
 import { mockCharacters } from '@/app/mocks/characters'
 import { DesktopCharacterShowcase } from '@/app/components/cards/DesktopCharacterShowcase/DesktopCharacterShowcase'
 import { MobileCharacterCarouselContainer } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarouselContainer'
-import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
 import { FavoritesPanel } from '@/app/components/favorites/FavoritesPanel/FavoritesPanel'
 import { getCharactersPage } from '@/lib/rick-and-morty/rick-and-morty.service'
 
@@ -26,10 +25,6 @@ export default async function Home() {
           loading='eager'
           className='h-auto'
         />
-      </div>
-
-      <div className='mt-6 md:hidden'>
-        <CharacterSearch />
       </div>
 
       <div className='md:hidden'>

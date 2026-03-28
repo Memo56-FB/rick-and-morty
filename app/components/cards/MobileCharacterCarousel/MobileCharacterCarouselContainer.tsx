@@ -1,159 +1,77 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
-import { CharacterCard } from '@/app/components/cards/CharacterCard/CharacterCard'
 import { MobileCharacterCarousel } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCarousel'
-import { getAdjacentCharactersPage } from '@/lib/rick-and-morty/rick-and-morty.service'
+import { MobileCharacterCardsPreview } from '@/app/components/cards/MobileCharacterCarousel/MobileCharacterCardsPreview'
+import { CharacterSearch } from '@/app/components/search/CharacterSearch/CharacterSearch'
+import { useMobileCharacterSearch } from './hooks/useMobileCharacterSearch'
+import { usePaginatedCharacters } from './hooks/usePaginatedCharacters'
 import type { CharactersPage } from '@/types/rick-and-morty'
 
 type MobileCharacterCarouselContainerProps = {
   initialCharactersPage: CharactersPage
 }
 
-type PrefetchedNextPage = {
-  sourcePage: number
-  page: CharactersPage
-}
-
 export const MobileCharacterCarouselContainer = ({
   initialCharactersPage,
 }: MobileCharacterCarouselContainerProps) => {
-  const [charactersPage, setCharactersPage] = useState(initialCharactersPage)
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [prefetchedNextPage, setPrefetchedNextPage] =
-    useState<PrefetchedNextPage | null>(null)
-  const [isLoadingPage, startTransition] = useTransition()
+  const searchCharacters = useMobileCharacterSearch()
+  const paginatedCharacters = usePaginatedCharacters(initialCharactersPage, {
+    disabled: searchCharacters.isSearchMode,
+  })
 
-  const handlePageChange = async (direction: 'next' | 'prev') => {
-    if (isLoadingPage) {
-      return
-    }
-
-    const nextPage = await getAdjacentCharactersPage(direction, charactersPage.info)
-
-    if (!nextPage) {
-      return
-    }
-
-    startTransition(() => {
-      setCharactersPage(nextPage)
-      setCurrentIndex(direction === 'next' ? 0 : nextPage.results.length - 1)
-      setPrefetchedNextPage(null)
-    })
-  }
-
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((previousIndex) => previousIndex - 1)
-      return
-    }
-
-    if (charactersPage.info.prev) {
-      void handlePageChange('prev')
-    }
-  }
-
-  const handleNext = () => {
-    if (currentIndex < charactersPage.results.length - 1) {
-      setCurrentIndex((previousIndex) => previousIndex + 1)
-      return
-    }
-
-    if (prefetchedNextPage?.sourcePage === charactersPage.page) {
-      startTransition(() => {
-        setCharactersPage(prefetchedNextPage.page)
-        setCurrentIndex(0)
-        setPrefetchedNextPage(null)
-      })
-      return
-    }
-
-    if (charactersPage.info.next) {
-      void handlePageChange('next')
-    }
-  }
-
-  const currentCharacter = charactersPage.results[currentIndex]
-  const nextCharacterFromCurrentPage = charactersPage.results[currentIndex + 1]
-  const nextCharacter = nextCharacterFromCurrentPage
-    ?? (prefetchedNextPage?.sourcePage === charactersPage.page
-      ? prefetchedNextPage.page.results[0] ?? null
-      : null)
-
-  useEffect(() => {
-    const shouldPrefetchNextPage = !nextCharacterFromCurrentPage && Boolean(charactersPage.info.next)
-
-    if (!shouldPrefetchNextPage) {
-      return
-    }
-
-    if (prefetchedNextPage?.sourcePage === charactersPage.page) {
-      return
-    }
-
-    let isCancelled = false
-
-    void getAdjacentCharactersPage('next', charactersPage.info).then((nextPage) => {
-      if (isCancelled || !nextPage) {
-        return
-      }
-
-      setPrefetchedNextPage({
-        sourcePage: charactersPage.page,
-        page: nextPage,
-      })
-    })
-
-    return () => {
-      isCancelled = true
-    }
-  }, [
-    charactersPage.info,
-    charactersPage.page,
-    nextCharacterFromCurrentPage,
-    prefetchedNextPage,
-  ])
-
-  if (!currentCharacter) {
-    return null
-  }
+  const activeCharacters = searchCharacters.isSearchMode
+    ? searchCharacters.characters
+    : paginatedCharacters.characters
+  const activeIndex = searchCharacters.isSearchMode
+    ? searchCharacters.currentIndex
+    : paginatedCharacters.currentIndex
+  const currentCharacter = searchCharacters.isSearchMode
+    ? searchCharacters.currentCharacter
+    : paginatedCharacters.currentCharacter
+  const nextCharacter = searchCharacters.isSearchMode
+    ? searchCharacters.nextCharacter
+    : paginatedCharacters.nextCharacter
+  const showNavigation = searchCharacters.isSearchMode
+    ? searchCharacters.showNavigation
+    : paginatedCharacters.showNavigation
+  const handleNext = searchCharacters.isSearchMode
+    ? searchCharacters.handleNext
+    : paginatedCharacters.handleNext
+  const handlePrevious = searchCharacters.isSearchMode
+    ? searchCharacters.handlePrevious
+    : paginatedCharacters.handlePrevious
+  const isLoading = searchCharacters.isSearchMode
+    ? searchCharacters.isSearching
+    : paginatedCharacters.isLoadingPage
 
   return (
     <>
-      <div className='mt-10 grid grid-cols-2 gap-2.5'>
-        <CharacterCard
-          name={currentCharacter.name}
-          imageSrc={currentCharacter.image}
-          selected
+      <div className='mt-6'>
+        <CharacterSearch
+          value={searchCharacters.searchQuery}
+          onChange={searchCharacters.handleSearchChange}
         />
-        {nextCharacter ? (
-          <CharacterCard
-            name={nextCharacter.name}
-            imageSrc={nextCharacter.image}
-          />
-        ) : (
-          <div
-            aria-hidden='true'
-            className='pointer-events-none invisible'
-          >
-            <CharacterCard
-              name={currentCharacter.name}
-              imageSrc={currentCharacter.image}
-            />
-          </div>
-        )}
       </div>
 
-      <div className='mt-8 w-full grid place-items-center'>
-        <MobileCharacterCarousel
-          key={charactersPage.page}
-          characters={charactersPage.results}
-          currentIndex={currentIndex}
-          isPageLoading={isLoadingPage}
-          onRequestNext={handleNext}
-          onRequestPrevious={handlePrevious}
-        />
-      </div>
+      {currentCharacter ? (
+        <>
+          <MobileCharacterCardsPreview
+            currentCharacter={currentCharacter}
+            nextCharacter={nextCharacter}
+          />
+
+          <div className='mt-8 w-full grid place-items-center'>
+            <MobileCharacterCarousel
+              characters={activeCharacters}
+              currentIndex={activeIndex}
+              isPageLoading={isLoading}
+              showNavigation={showNavigation}
+              onRequestNext={handleNext}
+              onRequestPrevious={handlePrevious}
+            />
+          </div>
+        </>
+      ) : null}
     </>
   )
 }

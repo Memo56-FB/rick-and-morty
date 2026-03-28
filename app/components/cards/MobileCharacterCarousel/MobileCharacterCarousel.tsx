@@ -12,6 +12,7 @@ type MobileCharacterCarouselProps = {
   characters: MobileCharacterCarouselItem[]
   currentIndex: number
   isPageLoading?: boolean
+  showNavigation?: boolean
   onRequestNext?: () => void
   onRequestPrevious?: () => void
 }
@@ -56,6 +57,7 @@ export const MobileCharacterCarousel = ({
   characters,
   currentIndex,
   isPageLoading = false,
+  showNavigation = true,
   onRequestNext,
   onRequestPrevious,
 }: MobileCharacterCarouselProps) => {
@@ -75,21 +77,27 @@ export const MobileCharacterCarousel = ({
     onRequestNext?.()
   }
 
+  const carouselClassName = showNavigation
+    ? styles.carousel
+    : `${styles.carousel} ${styles.carouselWithoutNavigation}`
+
   return (
     <section
-      className={styles.carousel}
+      className={carouselClassName}
       aria-label='Character carousel'
       aria-busy={isPageLoading}
     >
-      <button
-        type='button'
-        className={`${styles.carouselNavButton} ${styles.carouselNavPrevious}`}
-        onClick={handlePrevious}
-        aria-label='Show previous character'
-        disabled={isPageLoading}
-      >
-        <CarouselArrowIcon direction='left' />
-      </button>
+      {showNavigation ? (
+        <button
+          type='button'
+          className={`${styles.carouselNavButton} ${styles.carouselNavPrevious}`}
+          onClick={handlePrevious}
+          aria-label='Show previous character'
+          disabled={isPageLoading}
+        >
+          <CarouselArrowIcon direction='left' />
+        </button>
+      ) : null}
 
       <div className={styles.carouselViewport}>
         <div className={styles.imageFrame}>
@@ -160,15 +168,17 @@ export const MobileCharacterCarousel = ({
         </div>
       </div>
 
-      <button
-        type='button'
-        className={`${styles.carouselNavButton} ${styles.carouselNavNext}`}
-        onClick={handleNext}
-        aria-label='Show next character'
-        disabled={isPageLoading}
-      >
-        <CarouselArrowIcon direction='right' />
-      </button>
+      {showNavigation ? (
+        <button
+          type='button'
+          className={`${styles.carouselNavButton} ${styles.carouselNavNext}`}
+          onClick={handleNext}
+          aria-label='Show next character'
+          disabled={isPageLoading}
+        >
+          <CarouselArrowIcon direction='right' />
+        </button>
+      ) : null}
     </section>
   )
 }

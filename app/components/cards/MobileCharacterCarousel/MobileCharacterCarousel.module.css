@@ -6,6 +6,10 @@
   width: min(100%, 28rem);
 }
 
+.carouselWithoutNavigation {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .carouselViewport {
   position: relative;
   overflow: visible;

@@ -52,3 +52,27 @@ export const getAdjacentCharactersPage = async (
 
   return getCharactersPage(targetPage)
 }
+
+export const searchCharactersByName = async (name: string) => {
+  const normalizedName = name.trim()
+
+  if (!normalizedName) {
+    return []
+  }
+
+  try {
+    const response = await rickAndMortyHttpClient.get<
+      RickAndMortyPaginatedResponse<RickAndMortyApiCharacter>
+    >('character', {
+      params: { name: normalizedName },
+    })
+
+    return response.results.map(mapApiCharacterToCharacter)
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('There is nothing here')) {
+      return []
+    }
+
+    throw error
+  }
+}
